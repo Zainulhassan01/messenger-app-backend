@@ -6,6 +6,9 @@ const app = express()
 const connectDb = require("./config/database")
 connectDb()
 const userRoutes = require("./routes/userRoutes")
+const cors = require('cors')
+
+app.use(cors()) 
 
 app.use(bodyParser.json());
 app.use(express.urlencoded({extended: true}));
