@@ -1,30 +1,30 @@
 require('dotenv').config()
 const User = require("../models/user.model")
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 
 const registerUser = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password } = req.body
     
         if (!(email && password && name)) {
-          res.status(400).send("All input is required");
+          res.status(400).send("All input is required")
         }
     
-        const oldUser = await User.findOne({ email });
+        const oldUser = await User.findOne({ email })
     
         if (oldUser) {
-          return res.status(409).send("User Already Exist. Please Login");
+          return res.status(409).send("User Already Exist. Please Login")
         }
     
-        encryptedPassword = await bcrypt.hash(password, 10);
+        encryptedPassword = await bcrypt.hash(password, 10)
     
         const user = await User.create({
           name,
           email: email.toLowerCase(),
           password: encryptedPassword,
-        });
+        })
     
         // Create token
         const token = jwt.sign(
@@ -33,25 +33,25 @@ const registerUser = async (req, res) => {
           {
             expiresIn: "2h",
           }
-        );
+        )
 
-        user.token = token;
+        user.token = token
     
-        res.status(201).json(user);
+        res.status(201).json(user)
       } catch (err) {
-        console.log(err);
+        console.log(err)
       }
 }
 
 const loginUser = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { email, password } = req.body
     
         if (!(email && password)) {
-          res.status(400).send("All input is required");
+          res.status(400).send("All input is required")
         }
 
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email })
     
         if (user && (await bcrypt.compare(password, user.password))) {
           const token = jwt.sign(
@@ -60,15 +60,15 @@ const loginUser = async (req, res) => {
             {
               expiresIn: "2h",
             }
-          );
+          )
     
-          user.token = token;
+          user.token = token
     
-          return res.status(200).json(user);
+          return res.status(200).json(user)
         }
-        res.status(400).send("Invalid Credentials");
+        res.status(400).send("Invalid Credentials")
       } catch (err) {
-        console.log(err);
+        console.log(err)
       }
 }
 
