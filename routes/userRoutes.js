@@ -1,6 +1,6 @@
 const express = require('express')
 const userRoutes = express.Router()
-const {registerUser, loginUser} = require("../controllers/user.controller")
+const {registerUser, loginUser, chatUser} = require("../controllers/user.controller")
 const tokenVerification = require("../middleware/auth")
 
 userRoutes.post('/register', 
@@ -13,7 +13,7 @@ userRoutes.post('/login',
 
 userRoutes.post('/Welcome',
     tokenVerification,
-    (req, res) => res.send("Welcome!!")
+    (req, res) => chatUser(req, res)
 )
 
 module.exports = userRoutes

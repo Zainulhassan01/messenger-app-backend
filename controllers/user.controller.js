@@ -2,6 +2,8 @@ require('dotenv').config()
 const User = require("../models/user.model")
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const userPrompt = require("../UserInterface/interface")
+
 
 
 const registerUser = async (req, res) => {
@@ -72,4 +74,9 @@ const loginUser = async (req, res) => {
       }
 }
 
-module.exports = {registerUser, loginUser}
+const chatUser = async(req, res) => {
+    let result = userPrompt('How are you?')
+    res.send(result)
+}
+
+module.exports = {registerUser, loginUser, chatUser}
